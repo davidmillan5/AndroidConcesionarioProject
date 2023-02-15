@@ -1,0 +1,33 @@
+package com.example.concesionario_sabado;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+public class VentaActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_venta);
+    }
+
+    public void Clientes(View view){
+        Intent intClientes = new Intent(this,ClienteActivity.class);
+        startActivity(intClientes);
+    }
+
+    public void Vehiculos(View view){
+        Intent intVehiculos = new Intent(this,VehiculoActivity.class);
+        startActivity(intVehiculos);
+    }
+
+    public void Ventas(View view){
+        Intent intVentas = new Intent(this,VentaActivity.class);
+        startActivity(intVentas);
+    }
+
+
+}
