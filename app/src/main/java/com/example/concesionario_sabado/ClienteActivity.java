@@ -2,9 +2,13 @@ package com.example.concesionario_sabado;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class ClienteActivity extends AppCompatActivity {
 
@@ -12,6 +16,10 @@ public class ClienteActivity extends AppCompatActivity {
     CheckBox jcbactivo;
 
     String identificacion, nombre, correo;
+
+    ClsOpenHelper admin = new ClsOpenHelper(this,"Concesionario.db",null,1);
+
+    long respuesta;
 
 
     @Override
@@ -26,4 +34,38 @@ public class ClienteActivity extends AppCompatActivity {
         jcbactivo = findViewById(R.id.cbactivo);
 
     }
+
+    public void Guardar(View view){
+        identificacion = jetidentificacion.getText().toString();
+        nombre = jetnombre.getText().toString();
+        correo = jetcorreo.getText().toString();
+        if(identificacion.isEmpty() || nombre.isEmpty() || correo.isEmpty()){
+            Toast.makeText(this, "Todos los datos son requeridos", Toast.LENGTH_SHORT).show();
+            jetidentificacion.requestFocus();
+        }else{
+            SQLiteDatabase db = admin.getWritableDatabase();
+            ContentValues registro = new ContentValues();
+            registro.put("identificacion",identificacion);
+            registro.put("nombre",nombre);
+            registro.put("correo",correo);
+            respuesta = db.insert("TblCliente", null,registro);
+            if(respuesta == 0){
+                Toast.makeText(this, "Error guardando registro", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "Registro guardado", Toast.LENGTH_SHORT).show();
+                limpiar_campos();
+            }
+
+            db.close();
+        }
+    } //Fin del metodo guardar
+
+    private void limpiar_campos(){
+        jetidentificacion.setText("");
+        jetnombre.setText("");
+        jetcorreo.setText("");
+        jetidentificacion.requestFocus();
+
+    }
+
 }
