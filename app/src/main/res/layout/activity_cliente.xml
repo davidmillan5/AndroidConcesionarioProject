@@ -82,6 +82,7 @@
             android:layout_weight="1"
             android:textSize="18dp"
             android:layout_height="50dp"
+            android:onClick="Consultar"
             android:text="Consultar" />
     </LinearLayout>
 

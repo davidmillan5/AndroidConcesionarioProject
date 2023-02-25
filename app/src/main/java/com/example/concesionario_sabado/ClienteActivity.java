@@ -3,6 +3,7 @@ package com.example.concesionario_sabado;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -59,6 +60,28 @@ public class ClienteActivity extends AppCompatActivity {
             db.close();
         }
     } //Fin del metodo guardar
+
+
+    public void Consultar(View view){
+        //Validando que haya una identificacion
+        identificacion = jetidentificacion.getText().toString();
+        if(!identificacion.isEmpty()){
+            SQLiteDatabase db = admin.getReadableDatabase();
+            Cursor fila = db.rawQuery("select * from TblCliente where identificacion ='"+identificacion+"'",null);
+            if(fila.moveToNext()){
+                jetnombre.setText(fila.getString(1));
+                jetcorreo.setText(fila.getString(2));
+                jcbactivo.setChecked(fila.getString(3).equals("Si"));
+            }else{
+                Toast.makeText(this, "Registro no hallado", Toast.LENGTH_SHORT).show();
+                db.close();
+            }
+        }else{
+            Toast.makeText(this, "Identificacion es requerida para consultar", Toast.LENGTH_SHORT).show();
+            jetidentificacion.requestFocus();
+        }
+    }
+
 
     private void limpiar_campos(){
         jetidentificacion.setText("");
