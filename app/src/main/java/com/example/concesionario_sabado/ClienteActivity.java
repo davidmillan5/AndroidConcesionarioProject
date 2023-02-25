@@ -22,6 +22,8 @@ public class ClienteActivity extends AppCompatActivity {
 
     long respuesta;
 
+    byte sw;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class ClienteActivity extends AppCompatActivity {
         jetnombre = findViewById(R.id.etnombre);
         jetcorreo = findViewById(R.id.etcorreo);
         jcbactivo = findViewById(R.id.cbactivo);
+        sw = 0;
 
     }
 
@@ -49,7 +52,13 @@ public class ClienteActivity extends AppCompatActivity {
             registro.put("identificacion",identificacion);
             registro.put("nombre",nombre);
             registro.put("correo",correo);
-            respuesta = db.insert("TblCliente", null,registro);
+            if(sw==0){
+                respuesta = db.insert("TblCliente", null,registro);
+            }else{
+                respuesta = db.update("TblCliente",registro,"identificacion = '"+identificacion+"'",null);
+                sw = 0;
+            }
+
             if(respuesta == 0){
                 Toast.makeText(this, "Error guardando registro", Toast.LENGTH_SHORT).show();
             }else{
@@ -69,6 +78,7 @@ public class ClienteActivity extends AppCompatActivity {
             SQLiteDatabase db = admin.getReadableDatabase();
             Cursor fila = db.rawQuery("select * from TblCliente where identificacion ='"+identificacion+"'",null);
             if(fila.moveToNext()){
+                sw = 1;
                 jetnombre.setText(fila.getString(1));
                 jetcorreo.setText(fila.getString(2));
                 jcbactivo.setChecked(fila.getString(3).equals("Si"));
@@ -82,12 +92,16 @@ public class ClienteActivity extends AppCompatActivity {
         }
     }
 
+    public void Cancelar(View view){
+        limpiar_campos();
+    }
 
     private void limpiar_campos(){
         jetidentificacion.setText("");
         jetnombre.setText("");
         jetcorreo.setText("");
         jetidentificacion.requestFocus();
+        sw = 0;
 
     }
 
