@@ -92,6 +92,25 @@ public class ClienteActivity extends AppCompatActivity {
         }
     }
 
+    public void Anular(View view){
+        if(sw == 1){
+            sw = 0;
+            SQLiteDatabase db = admin.getWritableDatabase();
+            ContentValues registro = new ContentValues();
+            registro.put("activo","No");
+            respuesta = db.update("TblCliente",registro, "identificacion='"+identificacion+"'",null);
+            if(respuesta > 0){
+                Toast.makeText(this, "Registro anulado", Toast.LENGTH_SHORT).show();
+                limpiar_campos();
+            }else{
+                Toast.makeText(this, "Error anulando registro", Toast.LENGTH_SHORT).show();
+            }
+            db.close();
+        }else{
+            Toast.makeText(this, "Primero debe consultar", Toast.LENGTH_SHORT).show();
+            jetidentificacion.requestFocus();
+        }
+    }
     public void Cancelar(View view){
         limpiar_campos();
     }
